@@ -22,7 +22,8 @@
  *    'Sun, 17 May 1998 03:00:00 GMT+01' => Date()
  */
 function parseDataFromRfc2822(value) {
-   throw new Error('Not implemented');
+   let d = new Date(value);
+   return d;
 }
 
 /**
@@ -37,7 +38,8 @@ function parseDataFromRfc2822(value) {
  *    '2016-01-19T08:07:37Z' => Date()
  */
 function parseDataFromIso8601(value) {
-   throw new Error('Not implemented');
+	let d = new Date(value); 
+	return d; 
 }
 
 
@@ -56,9 +58,12 @@ function parseDataFromIso8601(value) {
  *    Date(2015,1,1)    => false
  */
 function isLeapYear(date) {
-   throw new Error('Not implemented');
+   let	year = date.getFullYear();
+   if ((year % 4) != 0) { return false; }
+	else if ((year % 100) != 0) { return true; }
+	else if ((year % 400) != 0) { return false; }
+	else { return true; }
 }
-
 
 /**
  * Returns the string represention of the timespan between two dates.
@@ -76,7 +81,44 @@ function isLeapYear(date) {
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
  */
 function timeSpanToString(startDate, endDate) {
-   throw new Error('Not implemented');
+  let startD = new Date(startDate);
+  let endD = new Date(endDate);
+  let value = endD - startD;
+	
+let h = "00";
+let hTemp = 0;
+let m = "00";
+let s = "00";
+let ms = "000";
+
+if (value >= 3600000){
+	hTemp = Math.floor(value / 3600000);
+	if (hTemp > 99){
+		h = toString(hTemp);
+	}
+	else{
+		h = h + hTemp;
+		h = h.slice(-2);
+	}
+	value = value % 3600000;
+}
+if ((3600000 > value)&& (value >= 60000)){
+	m = m + Math.floor(value / 60000);
+	m = m.slice(-2);
+	value = value % 60000;
+}
+
+if ((60000 > value) && (value >= 1000)){
+	s = s + Math.floor(value / 1000);
+	s = s.slice(-2);
+	value = value % 1000;
+}
+
+if (1000 > value){
+	ms = ms + value;
+  ms = ms.slice(-3);
+}
+  return (h+":"+ m + ":" + s + "." + ms) ;
 }
 
 
@@ -94,7 +136,17 @@ function timeSpanToString(startDate, endDate) {
  *    Date.UTC(2016,3,5,21, 0) => Math.PI/2
  */
 function angleBetweenClockHands(date) {
-    throw new Error('Not implemented');
+	let h = date.getUTCHours();
+	let m = date.getMinutes();
+  
+  	if (h > 12) {h = h - 12; } 
+  
+	let angle = Math.abs(0.5 * (60 * h - 11 * m));
+		if (angle > 180 ) {
+			angle = 360 - angle;
+		}
+	var rad = angle * Math.PI/180;
+	return rad;
 }
 
 
